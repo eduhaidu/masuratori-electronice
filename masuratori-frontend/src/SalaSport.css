@@ -1,0 +1,250 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sala-sport-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+/* Header Styles */
+.sala-sport-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.university-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-placeholder {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #8B0000;
+}
+
+.logo-placeholder span:first-child {
+  font-size: 18px;
+}
+
+.logo-placeholder span:nth-child(2) {
+  font-size: 18px;
+}
+
+.logo-placeholder span:last-child {
+  font-size: 12px;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.sala-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+  border: 3px solid #1a1a1a;
+  padding: 15px 50px;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.back-button-header {
+  background-color: #f5f5f5;
+  border: 2px solid #1a1a1a;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a1a1a;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.back-button-header:hover {
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.back-button-header:active {
+  transform: scale(0.98);
+}
+
+/* Main Content Layout */
+.sala-sport-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+/* Measurements Section (Left) */
+.measurements-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  align-content: start;
+}
+
+.measurement-group {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.measurement-title {
+  color: #0052a3;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.measurement-button {
+  background-color: #c8c8c8;
+  border: 2px solid #666;
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #1a1a1a;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.measurement-button:hover {
+  background-color: #a8a8a8;
+  border-color: #333;
+}
+
+.measurement-button:active {
+  transform: scale(0.98);
+}
+
+/* Values Section (Right) */
+.values-section {
+  display: flex;
+  align-items: flex-start;
+}
+
+.values-card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 3px solid #1a1a1a;
+  width: 100%;
+}
+
+.values-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.values-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.values-table:last-child {
+  margin-bottom: 0;
+}
+
+.values-table th {
+  background-color: #0052a3;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: 2px solid #1a1a1a;
+}
+
+.values-table td {
+  background-color: white;
+  color: #1a1a1a;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #1a1a1a;
+}
+
+.values-table td.unit-cell {
+  background-color: white;
+  font-weight: bold;
+  min-width: 50px;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .measurements-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .sala-sport-content {
+    grid-template-columns: 1fr;
+  }
+
+  .measurements-section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sala-sport-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .header-right {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sala-title {
+    font-size: 20px;
+    padding: 10px 30px;
+  }
+
+  .measurements-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .measurements-section {
+    grid-template-columns: 1fr;
+  }
+}
