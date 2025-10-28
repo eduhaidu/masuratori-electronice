@@ -6,9 +6,7 @@ app = Flask(__name__)
 # Definim o rută pentru pagina principală ("/")
 @app.route('/')
 def index():
-    # 'render_template' va căuta și randa fișierul 'index.html'
-    # din folderul 'templates'
-    return render_template('index.html')
+    return "ok mere"
 
 # Această condiție asigură că serverul rulează doar
 # dacă scriptul este executat direct (nu importat)
