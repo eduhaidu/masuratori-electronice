@@ -1,14 +1,12 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .dashboard-container {
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
   background-color: #f5f5f5;
   padding: 20px;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 /* Header Styles */
@@ -16,11 +14,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   background-color: white;
-  padding: 20px;
+  padding: 20px 30px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .university-logo {
@@ -49,16 +56,145 @@
   font-weight: 600;
 }
 
+/* Sala Selector in Header */
+.sala-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.selector-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.sala-select {
+  padding: 10px 15px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  background-color: #f5f5f5;
+  border: 2px solid #0052a3;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  min-width: 180px;
+}
+
+.sala-select:hover {
+  background-color: #e8e8e8;
+  border-color: #003d7a;
+}
+
+.sala-select:focus {
+  border-color: #003d7a;
+  box-shadow: 0 0 0 3px rgba(0, 82, 163, 0.1);
+}
+
+/* Dropdown Wrapper */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-trigger {
+  background-color: #0052a3;
+  border: 2px solid #0052a3;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.dropdown-trigger:hover:not(.disabled) {
+  background-color: #003d7a;
+  border-color: #003d7a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 82, 163, 0.3);
+}
+
+.dropdown-trigger.disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  min-width: 220px;
+  z-index: 1000;
+  animation: dropdownSlide 0.2s ease-out;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #0052a3;
+}
+
+.dropdown-item.primary {
+  background-color: #0052a3;
+  color: white;
+  margin-top: 4px;
+}
+
+.dropdown-item.primary:hover {
+  background-color: #003d7a;
+  color: white;
+}
+
 .raport-button {
   background-color: #f5f5f5;
   border: 2px solid #1a1a1a;
-  padding: 12px 40px;
-  font-size: 18px;
+  padding: 10px 30px;
+  font-size: 15px;
   font-weight: bold;
   color: #1a1a1a;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .raport-button:hover {
@@ -68,147 +204,61 @@
 
 /* Main Content Layout */
 .dashboard-content {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 30px;
-}
-
-/* Control Section (Left) */
-.control-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex: 1;
+  overflow-y: auto;
 }
 
-.control-group {
+/* Environmental Container */
+.environmental-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
   background-color: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
 }
 
-.section-title {
-  color: #0052a3;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.control-button {
-  background-color: #c8c8c8;
-  border: 2px solid #666;
-  padding: 10px 30px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #1a1a1a;
-  cursor: pointer;
-  border-radius: 4px;
-  width: 100%;
-  max-width: 150px;
-  transition: all 0.3s ease;
-}
-
-.control-button:hover {
-  background-color: #a8a8a8;
-  border-color: #333;
-}
-
-.control-button:active {
-  transform: scale(0.98);
-}
-
-/* Consumption Section (Center) */
-.consumption-section {
+/* Data Section */
+.data-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.consumption-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
 
-.consumption-row:last-child {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.consumption-card {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.consumption-card h4 {
-  color: #0052a3;
-  font-size: 14px;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.consumption-value {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.consumption-value .value {
-  background-color: white;
-  border: 2px solid #1a1a1a;
-  padding: 10px 20px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #1a1a1a;
-  border-radius: 4px;
-}
-
-.consumption-value .unit {
-  font-size: 18px;
-  font-weight: bold;
-  color: #1a1a1a;
-}
-
-/* Environmental Section (Right) */
-.environmental-section {
-  background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
 
 .env-card {
   text-align: center;
+  padding: 15px;
 }
 
 .env-card h4 {
-  font-size: 13px;
-  margin-bottom: 10px;
+  font-size: 14px;
+  margin-bottom: 15px;
   color: #1a1a1a;
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 .env-value {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
 }
 
 .env-value .value {
-  background-color: #005299;
+  background-color: #0052a3;
   color: white;
-  padding: 12px 25px;
-  font-size: 24px;
+  padding: 15px 30px;
+  font-size: 28px;
   font-weight: bold;
-  border-radius: 4px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .env-value .unit {
@@ -217,24 +267,207 @@
   color: #1a1a1a;
 }
 
+/* Selected Data Display */
+.selected-data-display {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selected-title {
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.selected-sala {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  opacity: 0.9;
+}
+
+.selected-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.selected-value .value {
+  background-color: white;
+  color: #0052a3;
+  padding: 20px 40px;
+  font-size: 42px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.selected-value .unit {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Time Selector */
+.time-selector {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.time-selector-title {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.time-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.time-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.time-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+.time-button.active {
+  background-color: white;
+  color: #0052a3;
+  border-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Chart Container */
+.chart-container {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in;
+}
+
+.chart-title {
+  color: #0052a3;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chart-wrapper {
+  height: 400px;
+  position: relative;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .dashboard-content {
+  .header-controls {
+    flex-wrap: wrap;
+  }
+
+  .environmental-container {
     grid-template-columns: 1fr;
   }
 
-  .consumption-row {
-    grid-template-columns: repeat(2, 1fr);
+  .chart-wrapper {
+    height: 300px;
   }
 }
 
 @media (max-width: 768px) {
-  .consumption-row {
-    grid-template-columns: 1fr;
-  }
-
   .dashboard-header {
     flex-direction: column;
-    gap: 15px;
+    padding: 15px;
+  }
+
+  .header-controls {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sala-selector {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sala-select {
+    width: 100%;
+  }
+
+  .dropdown-trigger,
+  .raport-button {
+    width: 100%;
+  }
+
+  .dropdown-menu {
+    right: auto;
+    left: 0;
+    width: 100%;
+  }
+
+  .selected-value .value {
+    font-size: 32px;
+    padding: 15px 30px;
+  }
+
+  .selected-value .unit {
+    font-size: 24px;
+  }
+
+  .time-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-wrapper {
+    height: 250px;
+  }
+
+  .chart-title {
+    font-size: 14px;
+  }
+
+  .env-value .value {
+    font-size: 24px;
+    padding: 12px 20px;
   }
 }
