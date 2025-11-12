@@ -54,7 +54,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   doc.text('1. DATE GENERALE', 20, yPos);
   
   yPos += 10;
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [['Parametru', 'Valoare', 'Unitate']],
     body: [
@@ -92,7 +92,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   yPos += 10;
   
   // Curenți de fază
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [['Curenți de Fază', 'L1-N', 'L2-N', 'L3-N']],
     body: [
@@ -119,7 +119,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   
   // Tensiuni
   yPos = doc.lastAutoTable.finalY + 8;
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [['Tensiuni', 'L1-L2', 'L2-L3', 'L3-L1']],
     body: [
@@ -156,7 +156,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   // Generăm date mock pentru statistici
   const stats = generateMockStats(salaData, timeInterval);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [['Indicator', 'Consum (kWh)', 'Temperatura (°C)', 'Umiditate (%)']],
     body: [
@@ -304,7 +304,7 @@ export const generateGeneralReport = (saliData) => {
     sala.umiditate
   ]);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [['Sala', 'Consum (kWh)', 'Temperatura (°C)', 'Umiditate (%)']],
     body: tableData,
@@ -339,7 +339,7 @@ export const generateGeneralReport = (saliData) => {
   const avgTemp = saliData.reduce((sum, sala) => sum + parseFloat(sala.temperatura), 0) / saliData.length;
   const avgHum = saliData.reduce((sum, sala) => sum + parseFloat(sala.umiditate), 0) / saliData.length;
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [['Indicator', 'Valoare']],
     body: [
