@@ -1,14 +1,23 @@
-from flask import Flask, render_template
+import os
 
-# Inițializăm aplicația Flask
+from dotenv import load_dotenv
+from flask import Flask, jsonify
+
+from modbus_client import read_all_registers
+
+load_dotenv()
+
 app = Flask(__name__)
 
-# Definim o rută pentru pagina principală ("/")
-@app.route('/')
+@app.route("/")
 def index():
-    return "ok mere"
+    return "Backend online"
 
-# Această condiție asigură că serverul rulează doar
-# dacă scriptul este executat direct (nu importat)
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/api/device-data")
+def device_data():
+    slave_id = int(os.getenv("MODBUS_SLAVE_ID", 1))
+    data = read_all_registers(slave_id)
+    return jsonify({"slave_id": slave_id, "data": data})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)

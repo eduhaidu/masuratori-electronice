@@ -27,4 +27,4 @@ Activare mediu virtual (macOS/Linux)
 source venv/bin/activate
 
 Activare mediu virtual (Windows - Command Prompt/PowerShell)
-.\venv\Scripts\activate
+venv\Scripts\activate
