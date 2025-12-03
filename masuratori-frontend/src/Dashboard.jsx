@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import Axios from 'axios';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,42 +31,121 @@ function Dashboard({ onNavigateToSala }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedOption, setSelectedOption] = useState({ sala: null, option: null });
   const [timeInterval, setTimeInterval] = useState('24h');
+  const [deviceData, setDeviceData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchDeviceData = async () => {
+      try {
+        const response = await Axios.get('http://localhost:5000/api/device-data');
+        setDeviceData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching device data:', error);
+        setLoading(false);
+      }
+    };
+
+    // Fetch inițial
+    fetchDeviceData();
+
+    // Polling la fiecare 5 secunde
+    const interval = setInterval(fetchDeviceData, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Mapare date API la sali (momentan toate sălile primesc aceleași date de la același device)
   const sali = [
     { 
       id: 'sala-sport', 
       name: 'SALA SPORT',
-      consum: '3589.07',
-      temperatura: '22.5',
-      umiditate: '48.5'
+      consum: deviceData?.data?.energy_import?.toFixed(2) || '0.00',
+      temperatura: '22.5', // Mock - necesită senzor separat
+      umiditate: '48.5',   // Mock - necesită senzor separat
+      currents: {
+        l1: deviceData?.data?.current_l1?.toFixed(3) || '0.000',
+        l2: deviceData?.data?.current_l2?.toFixed(3) || '0.000',
+        l3: deviceData?.data?.current_l3?.toFixed(3) || '0.000'
+      },
+      voltages: {
+        l1n: deviceData?.data?.voltage_l1_n?.toFixed(2) || '0.00',
+        l2n: deviceData?.data?.voltage_l2_n?.toFixed(2) || '0.00',
+        l3n: deviceData?.data?.voltage_l3_n?.toFixed(2) || '0.00'
+      },
+      power: deviceData?.data?.active_power?.toFixed(2) || '0.00'
     },
     { 
       id: 'corp-a', 
       name: 'CORP A',
-      consum: '4258.93',
+      consum: deviceData?.data?.energy_import ? (deviceData.data.energy_import * 1.18).toFixed(2) : '0.00',
       temperatura: '23.1',
-      umiditate: '52.3'
+      umiditate: '52.3',
+      currents: {
+        l1: deviceData?.data?.current_l1 ? (deviceData.data.current_l1 * 1.1).toFixed(3) : '0.000',
+        l2: deviceData?.data?.current_l2 ? (deviceData.data.current_l2 * 1.1).toFixed(3) : '0.000',
+        l3: deviceData?.data?.current_l3 ? (deviceData.data.current_l3 * 1.1).toFixed(3) : '0.000'
+      },
+      voltages: {
+        l1n: deviceData?.data?.voltage_l1_n?.toFixed(2) || '0.00',
+        l2n: deviceData?.data?.voltage_l2_n?.toFixed(2) || '0.00',
+        l3n: deviceData?.data?.voltage_l3_n?.toFixed(2) || '0.00'
+      },
+      power: deviceData?.data?.active_power ? (deviceData.data.active_power * 1.1).toFixed(2) : '0.00'
     },
     { 
       id: 'corp-b', 
       name: 'CORP B',
-      consum: '7892.1',
+      consum: deviceData?.data?.energy_import ? (deviceData.data.energy_import * 2.2).toFixed(2) : '0.00',
       temperatura: '21.8',
-      umiditate: '49.7'
+      umiditate: '49.7',
+      currents: {
+        l1: deviceData?.data?.current_l1 ? (deviceData.data.current_l1 * 1.4).toFixed(3) : '0.000',
+        l2: deviceData?.data?.current_l2 ? (deviceData.data.current_l2 * 1.4).toFixed(3) : '0.000',
+        l3: deviceData?.data?.current_l3 ? (deviceData.data.current_l3 * 1.4).toFixed(3) : '0.000'
+      },
+      voltages: {
+        l1n: deviceData?.data?.voltage_l1_n?.toFixed(2) || '0.00',
+        l2n: deviceData?.data?.voltage_l2_n?.toFixed(2) || '0.00',
+        l3n: deviceData?.data?.voltage_l3_n?.toFixed(2) || '0.00'
+      },
+      power: deviceData?.data?.active_power ? (deviceData.data.active_power * 1.4).toFixed(2) : '0.00'
     },
     { 
       id: 'aula-1', 
       name: 'AULA 1',
-      consum: '1212.59',
+      consum: deviceData?.data?.energy_import ? (deviceData.data.energy_import * 0.34).toFixed(2) : '0.00',
       temperatura: '24.2',
-      umiditate: '51.05'
+      umiditate: '51.05',
+      currents: {
+        l1: deviceData?.data?.current_l1 ? (deviceData.data.current_l1 * 0.6).toFixed(3) : '0.000',
+        l2: deviceData?.data?.current_l2 ? (deviceData.data.current_l2 * 0.6).toFixed(3) : '0.000',
+        l3: deviceData?.data?.current_l3 ? (deviceData.data.current_l3 * 0.6).toFixed(3) : '0.000'
+      },
+      voltages: {
+        l1n: deviceData?.data?.voltage_l1_n?.toFixed(2) || '0.00',
+        l2n: deviceData?.data?.voltage_l2_n?.toFixed(2) || '0.00',
+        l3n: deviceData?.data?.voltage_l3_n?.toFixed(2) || '0.00'
+      },
+      power: deviceData?.data?.active_power ? (deviceData.data.active_power * 0.6).toFixed(2) : '0.00'
     },
     { 
       id: 'aula-2', 
       name: 'AULA 2',
-      consum: '1345.06',
+      consum: deviceData?.data?.energy_import ? (deviceData.data.energy_import * 0.37).toFixed(2) : '0.00',
       temperatura: '23.7',
-      umiditate: '56.72'
+      umiditate: '56.72',
+      currents: {
+        l1: deviceData?.data?.current_l1 ? (deviceData.data.current_l1 * 0.68).toFixed(3) : '0.000',
+        l2: deviceData?.data?.current_l2 ? (deviceData.data.current_l2 * 0.68).toFixed(3) : '0.000',
+        l3: deviceData?.data?.current_l3 ? (deviceData.data.current_l3 * 0.68).toFixed(3) : '0.000'
+      },
+      voltages: {
+        l1n: deviceData?.data?.voltage_l1_n?.toFixed(2) || '0.00',
+        l2n: deviceData?.data?.voltage_l2_n?.toFixed(2) || '0.00',
+        l3n: deviceData?.data?.voltage_l3_n?.toFixed(2) || '0.00'
+      },
+      power: deviceData?.data?.active_power ? (deviceData.data.active_power * 0.68).toFixed(2) : '0.00'
     },
   ];
 
@@ -83,7 +163,8 @@ function Dashboard({ onNavigateToSala }) {
     }
     
     if (optionId === 'pagina') {
-      onNavigateToSala(selectedSala);
+      const sala = sali.find(s => s.id === selectedSala);
+      onNavigateToSala(selectedSala, sala);
     } else {
       setSelectedOption({ sala: selectedSala, option: optionId });
       setTimeInterval('24h'); // Reset to default interval
@@ -296,21 +377,27 @@ function Dashboard({ onNavigateToSala }) {
 
       {/* Main Content */}
       <div className="dashboard-content">
+        {loading && (
+          <div className="loading-message">
+            <p>Se încarcă datele de la dispozitiv...</p>
+          </div>
+        )}
+
         {/* Environmental Data Section */}
         <div className="environmental-container">
           <div className="env-card">
-            <h4>Temperatura exterioara</h4>
+            <h4>Putere Activă Totală</h4>
             <div className="env-value">
-              <span className="value">33.5</span>
-              <span className="unit">°C</span>
+              <span className="value">{deviceData?.data?.active_power?.toFixed(2) || '0.00'}</span>
+              <span className="unit">W</span>
             </div>
           </div>
 
           <div className="env-card">
-            <h4>UMIDITATE EXTERIOARA</h4>
+            <h4>Energie Totală Importată</h4>
             <div className="env-value">
-              <span className="value">42.08</span>
-              <span className="unit">%</span>
+              <span className="value">{deviceData?.data?.energy_import?.toFixed(2) || '0.00'}</span>
+              <span className="unit">kWh</span>
             </div>
           </div>
         </div>

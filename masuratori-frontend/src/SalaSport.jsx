@@ -2,85 +2,50 @@ import { useState } from 'react';
 import { generateSalaReport } from './utils/pdfGenerator';
 import './SalaSport.css';
 
-function SalaSport({ onBack, salaId }) {
-  // Definim datele pentru fiecare sală
-  const saliData = {
-    'sala-sport': {
-      name: 'SALA SPORT',
-      values: {
-        l1n: '56.3',
-        l2n: '55.9',
-        l3n: '56.7',
-        l1l2: '398.5',
-        l2l3: '397.2',
-        l3l1: '399.1'
-      }
-    },
-    'corp-a': {
-      name: 'CORP A',
-      values: {
-        l1n: '62.8',
-        l2n: '61.5',
-        l3n: '63.2',
-        l1l2: '402.3',
-        l2l3: '401.8',
-        l3l1: '403.5'
-      }
-    },
-    'corp-b': {
-      name: 'CORP B',
-      values: {
-        l1n: '78.4',
-        l2n: '77.9',
-        l3n: '79.1',
-        l1l2: '405.7',
-        l2l3: '404.9',
-        l3l1: '406.2'
-      }
-    },
-    'aula-1': {
-      name: 'AULA 1',
-      values: {
-        l1n: '34.5',
-        l2n: '33.8',
-        l3n: '35.1',
-        l1l2: '395.2',
-        l2l3: '394.6',
-        l3l1: '396.0'
-      }
-    },
-    'aula-2': {
-      name: 'AULA 2',
-      values: {
-        l1n: '38.2',
-        l2n: '37.6',
-        l3n: '38.9',
-        l1l2: '396.8',
-        l2l3: '396.1',
-        l3l1: '397.5'
-      }
+function SalaSport({ onBack, salaId, salaData }) {
+  // Calculare tensiuni linie-linie (√3 × tensiune fază)
+  const calculateLineVoltages = (voltages) => {
+    const l1n = parseFloat(voltages?.l1n) || 0;
+    const l2n = parseFloat(voltages?.l2n) || 0;
+    const l3n = parseFloat(voltages?.l3n) || 0;
+    const avgPhaseVoltage = (l1n + l2n + l3n) / 3;
+    const lineVoltage = avgPhaseVoltage * Math.sqrt(3);
+    
+    return {
+      l1l2: lineVoltage.toFixed(2),
+      l2l3: lineVoltage.toFixed(2),
+      l3l1: lineVoltage.toFixed(2)
+    };
+  };
+
+  const lineVoltages = salaData?.voltages ? calculateLineVoltages(salaData.voltages) : { l1l2: '0.00', l2l3: '0.00', l3l1: '0.00' };
+
+  const currentSala = {
+    name: salaData?.name || 'SALA',
+    values: {
+      // Curenți din API
+      l1n: salaData?.currents?.l1 || '0.000',
+      l2n: salaData?.currents?.l2 || '0.000',
+      l3n: salaData?.currents?.l3 || '0.000',
+      // Tensiuni fază-neutru din API
+      voltage_l1n: salaData?.voltages?.l1n || '0.00',
+      voltage_l2n: salaData?.voltages?.l2n || '0.00',
+      voltage_l3n: salaData?.voltages?.l3n || '0.00',
+      // Tensiuni linie-linie calculate
+      l1l2: lineVoltages.l1l2,
+      l2l3: lineVoltages.l2l3,
+      l3l1: lineVoltages.l3l1
     }
   };
 
-  const currentSala = saliData[salaId] || saliData['sala-sport'];
-
   const handleGenerateReport = () => {
-    // Adaugă și datele de consum pentru raport
     const reportData = {
       ...currentSala,
       id: salaId,
-      consum: salaId === 'sala-sport' ? '3589.07' :
-              salaId === 'corp-a' ? '4258.93' :
-              salaId === 'corp-b' ? '7892.1' :
-              salaId === 'aula-1' ? '1212.59' : '1345.06',
-      temperatura: salaId === 'sala-sport' ? '22.5' :
-                   salaId === 'corp-a' ? '23.1' :
-                   salaId === 'corp-b' ? '21.8' :
-                   salaId === 'aula-1' ? '24.2' : '23.7',
-      umiditate: salaId === 'sala-sport' ? '48.5' :
-                 salaId === 'corp-a' ? '52.3' :
-                 salaId === 'corp-b' ? '49.7' :
-                 salaId === 'aula-1' ? '51.05' : '56.72'
+      consum: salaData?.consum || '0.00',
+      temperatura: salaData?.temperatura || '0.0',
+      umiditate: salaData?.umiditate || '0.0',
+      power: salaData?.power || '0.00'
     };
     generateSalaReport(reportData, '24h');
   };
@@ -177,7 +142,7 @@ function SalaSport({ onBack, salaId }) {
           <div className="values-card">
             <h2 className="values-title">VALORI MARIMI ELECTRICE MASURATE</h2>
             
-            {/* First Table */}
+            {/* First Table - Curenți */}
             <table className="values-table">
               <thead>
                 <tr>
@@ -197,7 +162,27 @@ function SalaSport({ onBack, salaId }) {
               </tbody>
             </table>
 
-            {/* Second Table */}
+            {/* Second Table - Tensiuni fază-neutru */}
+            <table className="values-table">
+              <thead>
+                <tr>
+                  <th>L1-N</th>
+                  <th>L2-N</th>
+                  <th>L3-N</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{currentSala.values.voltage_l1n}</td>
+                  <td>{currentSala.values.voltage_l2n}</td>
+                  <td>{currentSala.values.voltage_l3n}</td>
+                  <td className="unit-cell">V</td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Third Table - Tensiuni linie-linie */}
             <table className="values-table">
               <thead>
                 <tr>

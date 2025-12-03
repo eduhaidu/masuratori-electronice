@@ -6,15 +6,18 @@ import './App.css'
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [currentSala, setCurrentSala] = useState(null);
+  const [salaData, setSalaData] = useState(null);
 
-  const handleNavigateToSala = (salaId) => {
+  const handleNavigateToSala = (salaId, data) => {
     setCurrentSala(salaId);
+    setSalaData(data);
     setCurrentView('sala-detail');
   };
 
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
     setCurrentSala(null);
+    setSalaData(null);
   };
 
   return (
@@ -23,7 +26,7 @@ function App() {
         <Dashboard onNavigateToSala={handleNavigateToSala} />
       )}
       {currentView === 'sala-detail' && currentSala && (
-        <SalaSport onBack={handleBackToDashboard} salaId={currentSala} />
+        <SalaSport onBack={handleBackToDashboard} salaId={currentSala} salaData={salaData} />
       )}
     </>
   )
