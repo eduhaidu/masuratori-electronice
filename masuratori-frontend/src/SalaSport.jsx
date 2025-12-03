@@ -146,9 +146,9 @@ function SalaSport({ onBack, salaId, salaData }) {
             <table className="values-table">
               <thead>
                 <tr>
-                  <th>L1-N</th>
-                  <th>L2-N</th>
-                  <th>L3-N</th>
+                  <th>L1</th>
+                  <th>L2</th>
+                  <th>L3</th>
                   <th></th>
                 </tr>
               </thead>
@@ -157,50 +157,11 @@ function SalaSport({ onBack, salaId, salaData }) {
                   <td>{currentSala.values.l1n}</td>
                   <td>{currentSala.values.l2n}</td>
                   <td>{currentSala.values.l3n}</td>
-                  <td className="unit-cell">A</td>
+                  <td className="unit-cell">v</td>
                 </tr>
               </tbody>
             </table>
 
-            {/* Second Table - Tensiuni fază-neutru */}
-            <table className="values-table">
-              <thead>
-                <tr>
-                  <th>L1-N</th>
-                  <th>L2-N</th>
-                  <th>L3-N</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{currentSala.values.voltage_l1n}</td>
-                  <td>{currentSala.values.voltage_l2n}</td>
-                  <td>{currentSala.values.voltage_l3n}</td>
-                  <td className="unit-cell">V</td>
-                </tr>
-              </tbody>
-            </table>
-
-            {/* Third Table - Tensiuni linie-linie */}
-            <table className="values-table">
-              <thead>
-                <tr>
-                  <th>L1-L2</th>
-                  <th>L2-L3</th>
-                  <th>L3-L1</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{currentSala.values.l1l2}</td>
-                  <td>{currentSala.values.l2l3}</td>
-                  <td>{currentSala.values.l3l1}</td>
-                  <td className="unit-cell">V</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>

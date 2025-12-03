@@ -1,9 +1,10 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+const fontName = 'Roboto';
+  
 export const generateSalaReport = (salaData, timeInterval = '24h') => {
   const doc = new jsPDF();
-  
   // Culori
   const primaryColor = [0, 82, 163]; // #0052a3
   const secondaryColor = [139, 0, 0]; // #8B0000
@@ -15,22 +16,22 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.text('TECHNICAL UNIVERSITY', 105, 15, { align: 'center' });
   doc.setFontSize(16);
   doc.text('of Cluj-Napoca', 105, 22, { align: 'center' });
   
   doc.setFontSize(24);
-  doc.text('RAPORT MĂSURĂTORI', 105, 33, { align: 'center' });
+  doc.text('RAPORT MASURATORI', 105, 33, { align: 'center' });
   
   // Informații sală și dată
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.text(`Sala: ${salaData.name}`, 20, 55);
   
   doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
+  doc.setFont(fontName, 'normal');
   const currentDate = new Date().toLocaleString('ro-RO', {
     year: 'numeric',
     month: 'long',
@@ -38,7 +39,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
     hour: '2-digit',
     minute: '2-digit'
   });
-  doc.text(`Data generării: ${currentDate}`, 20, 62);
+  doc.text(`Data generarii: ${currentDate}`, 20, 62);
   doc.text(`Interval monitorizat: ${getIntervalText(timeInterval)}`, 20, 68);
   
   // Linie separator
@@ -49,7 +50,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   // Secțiunea: Date Generale
   let yPos = 80;
   doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.setTextColor(...primaryColor);
   doc.text('1. DATE GENERALE', 20, yPos);
   
@@ -85,16 +86,16 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   // Secțiunea: Parametrii Electrici
   yPos = doc.lastAutoTable.finalY + 15;
   doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.setTextColor(...primaryColor);
-  doc.text('2. PARAMETRI ELECTRICI MĂSURAȚI', 20, yPos);
+  doc.text('2. PARAMETRI ELECTRICI MASURATI', 20, yPos);
   
   yPos += 10;
   
   // Curenți de fază
   autoTable(doc, {
     startY: yPos,
-    head: [['Curenți de Fază', 'L1-N', 'L2-N', 'L3-N']],
+    head: [['Curenti de Faza', 'L1-N', 'L2-N', 'L3-N']],
     body: [
       ['Valoare (A)', salaData.values?.l1n || 'N/A', salaData.values?.l2n || 'N/A', salaData.values?.l3n || 'N/A'],
     ],
@@ -147,7 +148,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
   // Secțiunea: Date Statistice
   yPos = doc.lastAutoTable.finalY + 15;
   doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.setTextColor(...primaryColor);
   doc.text('3. DATE STATISTICE', 20, yPos);
   
@@ -161,9 +162,9 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
     head: [['Indicator', 'Consum (kWh)', 'Temperatura (°C)', 'Umiditate (%)']],
     body: [
       ['Valoare Medie', stats.consum.avg, stats.temperatura.avg, stats.umiditate.avg],
-      ['Valoare Minimă', stats.consum.min, stats.temperatura.min, stats.umiditate.min],
-      ['Valoare Maximă', stats.consum.max, stats.temperatura.max, stats.umiditate.max],
-      ['Deviație Standard', stats.consum.std, stats.temperatura.std, stats.umiditate.std],
+      ['Valoare Minima', stats.consum.min, stats.temperatura.min, stats.umiditate.min],
+      ['Valoare Maxima', stats.consum.max, stats.temperatura.max, stats.umiditate.max],
+      ['Deviatie Standard', stats.consum.std, stats.temperatura.std, stats.umiditate.std],
     ],
     theme: 'grid',
     headStyles: {
@@ -175,7 +176,8 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
     },
     bodyStyles: {
       fontSize: 9,
-      halign: 'center'
+      halign: 'center',
+      fontStyle: 'bold'
     },
     columnStyles: {
       0: { fontStyle: 'bold', halign: 'left', fillColor: lightGray }
@@ -196,7 +198,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
       { align: 'center' }
     );
     doc.text(
-      'Sistem de Monitorizare Măsurători Electronice - UTCN',
+      'Sistem de Monitorizare Masuratori Electronice - UTCN',
       105,
       292,
       { align: 'center' }
@@ -211,7 +213,7 @@ export const generateSalaReport = (salaData, timeInterval = '24h') => {
 // Funcție helper pentru text interval
 const getIntervalText = (interval) => {
   const intervals = {
-    '1h': 'Ultima oră',
+    '1h': 'Ultima ora',
     '6h': 'Ultimele 6 ore',
     '12h': 'Ultimele 12 ore',
     '24h': 'Ultimele 24 ore',
@@ -262,7 +264,7 @@ export const generateGeneralReport = (saliData) => {
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.text('TECHNICAL UNIVERSITY', 105, 15, { align: 'center' });
   doc.setFontSize(16);
   doc.text('of Cluj-Napoca', 105, 22, { align: 'center' });
@@ -273,7 +275,7 @@ export const generateGeneralReport = (saliData) => {
   // Informații generale
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
+  doc.setFont(fontName, 'normal');
   const currentDate = new Date().toLocaleString('ro-RO', {
     year: 'numeric',
     month: 'long',
@@ -281,7 +283,7 @@ export const generateGeneralReport = (saliData) => {
     hour: '2-digit',
     minute: '2-digit'
   });
-  doc.text(`Data generării: ${currentDate}`, 20, 55);
+  doc.text(`Data generarii: ${currentDate}`, 20, 55);
   
   // Linie separator
   doc.setDrawColor(...primaryColor);
@@ -291,9 +293,9 @@ export const generateGeneralReport = (saliData) => {
   // Tabel cu toate sălile
   let yPos = 70;
   doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.setTextColor(...primaryColor);
-  doc.text('REZUMAT TOATE SĂLILE', 20, yPos);
+  doc.text('REZUMAT TOATE SALILE', 20, yPos);
   
   yPos += 10;
   
@@ -329,7 +331,7 @@ export const generateGeneralReport = (saliData) => {
   // Statistici generale
   yPos = doc.lastAutoTable.finalY + 15;
   doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont(fontName, 'bold');
   doc.setTextColor(...primaryColor);
   doc.text('STATISTICI GENERALE', 20, yPos);
   
@@ -344,10 +346,10 @@ export const generateGeneralReport = (saliData) => {
     head: [['Indicator', 'Valoare']],
     body: [
       ['Consum Total', `${totalConsum.toFixed(2)} kWh`],
-      ['Consum Mediu / Sală', `${(totalConsum / saliData.length).toFixed(2)} kWh`],
+      ['Consum Mediu / Sala', `${(totalConsum / saliData.length).toFixed(2)} kWh`],
       ['Temperatura Medie', `${avgTemp.toFixed(1)} °C`],
       ['Umiditate Medie', `${avgHum.toFixed(1)} %`],
-      ['Număr Săli Monitorizate', saliData.length.toString()],
+      ['Numar Sali Monitorizate', saliData.length.toString()],
     ],
     theme: 'grid',
     headStyles: {
@@ -380,7 +382,7 @@ export const generateGeneralReport = (saliData) => {
       { align: 'center' }
     );
     doc.text(
-      'Sistem de Monitorizare Măsurători Electronice - UTCN',
+      'Sistem de Monitorizare MMasuratori Electronice - UTCN',
       105,
       292,
       { align: 'center' }
